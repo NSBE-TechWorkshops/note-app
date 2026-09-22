@@ -1,4 +1,38 @@
+# API server
 fastapi==0.117.1
 uvicorn[standard]==0.36.0
-psycopg[binary]==3.2.10
+
+# Configuration
 python-dotenv==1.1.1
+pydantic-settings
+
+# Database and migrations
+psycopg[binary]==3.2.10
+sqlalchemy
+alembic
+pgvector
+
+# AWS services: S3, SES, SSM/Secrets Manager, and deployment integrations
+boto3
+
+# Auth and HTTP clients
+pyjwt[crypto]
+httpx
+python-multipart
+
+# LangChain + OpenAI RAG stack
+langchain
+langchain-community
+langchain-openai
+langchain-postgres
+langchain-text-splitters
+tiktoken
+
+# Document parsing
+pypdf
+python-docx
+
+# Development and tests
+pytest
+pytest-asyncio
+ruff

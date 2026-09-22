@@ -10,6 +10,7 @@ venv/
 
 # Frontend builds
 dist/
+*.tsbuildinfo
 
 # Environment files
 .env
