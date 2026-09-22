@@ -27,6 +27,7 @@ export function App() {
         : "Backend: checking";
 
   return (
+    // note for you guys the data for the page gets rendered here to be displayed, basically a return function that returns HTML
     <main className="app-shell">
       <section className="workspace">
         <p className="eyebrow">Student Notes RAG</p>
