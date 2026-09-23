@@ -11,34 +11,33 @@ post_create:
   - cd backend && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 windows:
-  # first window
   - name: editor
-  - panes:
+    panes:
       - command: nvim
-      - name: nvim
-      - focus: true
-  # second window
+        name: nvim
+        focus: true
+
   - name: AI
     panes:
       - command: oc
-      - name: OpenCode
-      - focus: true
+        name: OpenCode
+        focus: true
       - command: pi
-      - name: Pi
-      - split: vertical
+        name: Pi
+        split: vertical
       - command: codex
-      - name: Codex
-      - split: horizontal
-  # third window
+        name: Codex
+        split: horizontal
+
   - name: Lazygit & Hunk
-  - panes:
+    panes:
       - command: lazygit
-      - name: Lazygit
-      - focus: true
+        name: Lazygit
+        focus: true
       - command: hunk diff --watch
-      - name: Hunk
-      - split: vertical
-  # fourth window
+        name: Hunk
+        split: vertical
+
   - name: Server
-  - panes:
+    panes:
       - focus: true
