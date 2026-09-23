@@ -1,0 +1,17 @@
+aws_region      = "us-east-1"
+project_name    = "note-buddy"
+environment     = "dev"
+container_image_tag = "latest"
+
+# Add the deployed frontend origin when it exists.
+cognito_callback_urls = ["http://localhost:5173/callback"]
+cognito_logout_urls   = ["http://localhost:5173/"]
+cors_origins          = "http://localhost:5173"
+
+# Set these only after creating a Google OAuth web client.
+enable_google_identity_provider = false
+# google_client_id     = "..."
+# google_client_secret = "..."
+
+# Pass secrets through an ignored tfvars file or environment variables.
+# llm_api_key = "..."
