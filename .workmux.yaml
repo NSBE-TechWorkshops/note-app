@@ -2,6 +2,7 @@ mode: session
 
 files:
   symlink:
+    - .workmux.yaml
     - frontend/node_modules # Share node_modules across worktrees (fast, no disk copy)
   copy:
     - .env.example
