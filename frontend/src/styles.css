@@ -7,6 +7,10 @@ button, input { font: inherit; }
 button { cursor: pointer; }
 .corg-app { display: flex; min-height: 100vh; background: #fbfaf2; }
 .chat-stage { position: relative; min-height: 100vh; flex: 1; overflow: hidden; background: #fbfaf2 url("./assets/corg/dashed-grid.svg"); }
+.auth-actions { position: absolute; z-index: 2; top: 27px; right: 36px; }
+.auth-actions button { padding: 8px 14px; border: 1px solid #000; border-radius: 4px; background: #000; color: #fff; font-size: 14px; font-weight: 600; }
+.auth-actions button:hover { background: #fff; color: #000; }
+.auth-actions button:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
 .menu-button { position: absolute; z-index: 2; top: 27px; left: 36px; display: grid; place-content: center; gap: 5px; width: 32px; height: 32px; padding: 5px; border: 0; background: transparent; }
 .menu-button span { display: block; width: 22px; height: 2px; border-radius: 2px; background: #323232; }
 .menu-button img { width: 16px; height: 16px; }
@@ -15,11 +19,15 @@ h1 { margin: 0 0 24px; font-family: "Instrument Serif", serif; font-size: clamp(
 .composer { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 14px 12px 18px; border: 1px solid rgba(0,0,0,.45); border-radius: 7px; background: #d9d9d9; text-align: left; }
 .composer textarea { min-width: 0; flex: 1; max-height: 180px; padding: 0; overflow-y: auto; border: 0; outline: 0; resize: none; background: transparent; color: #323232; font-size: 14px; line-height: 20px; }
 .composer textarea::placeholder, small { color: rgba(0,0,0,.45); }
-.composer button { display: grid; place-items: center; width: 24px; height: 24px; padding: 2px; border: 0; background: transparent; }
-.composer img { width: 20px; height: 20px; }
+.composer button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 7px; background: #323232; }
+.composer button:hover { background: #000; }
+.composer button:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+.composer img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
 .document-upload { display: inline-flex; align-items: center; gap: 10px; margin-top: 27px; padding-bottom: 4px; border-bottom: 1px dashed rgba(0,0,0,.35); font-family: "Instrument Serif", serif; font-size: 22px; font-style: italic; cursor: pointer; }
 .document-upload img { width: 18px; height: 18px; }
 .document-upload input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.inline-error { margin: 12px 0 0; color: #b3261e; font-size: 12px; }
+.document-status { display: block; margin-top: 10px; }
 .sidebar { position: relative; z-index: 3; width: 309px; min-height: 100vh; flex: 0 0 309px; padding: 18px 16px 20px; border-right: 1px solid #c9c8bf; background: #e6e5dd; }
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; height: 34px; }
 .sidebar-header em { font-family: "Instrument Serif", serif; font-size: 28px; }
@@ -43,6 +51,27 @@ h1 { margin: 0 0 24px; font-family: "Instrument Serif", serif; font-size: clamp(
 .sidebar-footer strong { font-weight: 500; }
 .sidebar-footer small { font-size: 11px; }
 .sidebar-footer > img { margin-left: auto; }
+.sidebar-settings-button { display: grid; place-items: center; margin-left: auto; padding: 4px; border: 0; border-radius: 6px; background: transparent; }
+.sidebar-settings-button:hover { background: #d9d9d9; }
+.modal-overlay { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: rgba(0,0,0,.45); }
+.modal { display: grid; gap: 10px; width: min(360px, calc(100vw - 48px)); padding: 24px; border-radius: 10px; background: #fbfaf2; }
+.modal h2 { margin: 0; font-family: "Instrument Serif", serif; font-size: 26px; font-weight: 400; }
+.modal p { margin: 0 0 6px; color: rgba(0,0,0,.64); font-size: 13px; }
+.modal input { height: 40px; padding: 0 12px; border: 1px solid #b5b4ab; border-radius: 7px; background: #d9d9d9; font-size: 14px; }
+.modal button[type="submit"] { height: 40px; border: 0; border-radius: 7px; background: #323232; color: #fbfaf2; font-size: 14px; font-weight: 500; }
+.modal button[type="submit"]:disabled { opacity: .5; cursor: default; }
+.modal-error { color: #b3261e; }
+.settings-page { display: grid; place-items: start center; padding-top: 80px; }
+.settings-panel { display: grid; gap: 16px; width: min(420px, calc(100vw - 48px)); }
+.settings-back { justify-self: start; color: rgba(0,0,0,.64); font-size: 13px; text-decoration: none; }
+.settings-panel h1 { margin: 0; font-family: "Instrument Serif", serif; font-size: 42px; font-weight: 400; }
+.settings-form { display: grid; gap: 8px; }
+.settings-form label { font-size: 12px; font-weight: 500; color: rgba(0,0,0,.64); }
+.settings-form input { height: 44px; padding: 0 14px; border: 1px solid #b5b4ab; border-radius: 7px; background: #d9d9d9; font-size: 14px; }
+.settings-form button { height: 44px; margin-top: 6px; border: 0; border-radius: 7px; background: #323232; color: #fbfaf2; font-size: 14px; font-weight: 500; }
+.settings-form button:disabled { opacity: .5; cursor: default; }
+.settings-status { color: rgba(0,0,0,.64); }
+.settings-error { color: #b3261e; }
 .conversation { width: min(974px, calc(100vw - 96px)); margin: 0 auto; padding: 142px 0 150px; }
 .turn { margin-bottom: 26px; }
 .question { margin: 0 0 18px; color: rgba(0,0,0,.64); font-family: "Instrument Serif", serif; font-size: 32px; font-style: italic; letter-spacing: -.02em; }
