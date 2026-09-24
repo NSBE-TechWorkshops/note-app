@@ -1,6 +1,6 @@
 resource "random_password" "database" {
   length  = 32
-  special = true
+  special = false
 }
 
 resource "aws_db_subnet_group" "this" {
