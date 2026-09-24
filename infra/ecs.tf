@@ -11,6 +11,11 @@ resource "aws_ecs_task_definition" "backend" {
   execution_role_arn       = aws_iam_role.ecs_execution.arn
   task_role_arn            = aws_iam_role.ecs_task.arn
 
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
   container_definitions = jsonencode([
     {
       name      = "backend"
@@ -28,7 +33,7 @@ resource "aws_ecs_task_definition" "backend" {
       environment = [
         { name = "APP_ENV", value = var.environment },
         { name = "AWS_REGION", value = var.aws_region },
-        { name = "S3_UPLOAD_BUCKET", value = aws_s3_bucket.uploads.bucket },
+        { name = "S3_BUCKET_NAME", value = aws_s3_bucket.uploads.bucket },
         { name = "COGNITO_USER_POOL_ID", value = aws_cognito_user_pool.this.id },
         { name = "COGNITO_CLIENT_ID", value = aws_cognito_user_pool_client.this.id },
         { name = "COGNITO_ISSUER", value = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.this.id}" },

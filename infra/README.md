@@ -45,6 +45,26 @@ terraform apply tfplan
 Build and push the backend image using the `ecr_repository_url` output, then
 apply again if the image tag or ECS task definition changes.
 
+## Container image architecture
+
+The ECS task definition pins `runtime_platform` to `ARM64`, so the image in ECR
+**must** be `linux/arm64`. On an Apple Silicon machine a plain `docker build`
+produces that natively. From an x86 machine, build with
+`docker buildx build --platform linux/arm64`.
+
+If the two disagree, tasks never start and the ALB returns `503` with no CORS
+headers on every route, which surfaces in the browser as a CORS error rather
+than as the architecture mismatch it actually is. The real cause is only
+visible in the ECS service events:
+
+```
+CannotPullContainerError: image Manifest does not contain descriptor
+matching platform 'linux/amd64'
+```
+
+To switch the stack to x86 instead, change `cpu_architecture` to `X86_64` in
+`ecs.tf` and rebuild the image for `linux/amd64`. Change both together.
+
 The database secret is created by Terraform and its ARN is available from
 `rds_database_secret_arn`. Terraform state contains generated database and
 optional application secrets, so use an encrypted remote state backend before
