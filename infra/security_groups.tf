@@ -43,7 +43,7 @@ resource "aws_security_group" "ecs" {
 
 resource "aws_security_group" "rds" {
   name        = "${local.name_prefix}-rds"
-  description = "PostgreSQL access from ECS only"
+  description = "PostgreSQL access from ECS and Lambda"
   vpc_id      = aws_vpc.this.id
 
   ingress {
@@ -54,7 +54,29 @@ resource "aws_security_group" "rds" {
     security_groups = [aws_security_group.ecs.id]
   }
 
+  ingress {
+    description     = "PostgreSQL from Lambda"
+    protocol        = "tcp"
+    from_port       = 5432
+    to_port         = 5432
+    security_groups = [aws_security_group.lambda.id]
+  }
+
   egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "lambda" {
+  name        = "${local.name_prefix}-lambda"
+  description = "Lambda function network access"
+  vpc_id      = aws_vpc.this.id
+
+  egress {
+    description = "HTTPS, S3, SQS, Secrets Manager, RDS"
     protocol    = "-1"
     from_port   = 0
     to_port     = 0

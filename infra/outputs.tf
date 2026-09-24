@@ -54,6 +54,18 @@ output "ecr_repository_url" {
   value = aws_ecr_repository.backend.repository_url
 }
 
+output "ecr_lambda_repository_url" {
+  value = aws_ecr_repository.lambda_doc_processor.repository_url
+}
+
+output "sqs_queue_url" {
+  value = aws_sqs_queue.document_processor.url
+}
+
+output "sqs_dlq_url" {
+  value = aws_sqs_queue.document_processor_dlq.url
+}
+
 output "cognito_hosted_ui_login_url" {
   value = "https://${aws_cognito_user_pool_domain.this.domain}.auth.${var.aws_region}.amazoncognito.com/login?client_id=${aws_cognito_user_pool_client.this.id}&response_type=code&scope=openid+email+profile&redirect_uri=${urlencode(var.cognito_callback_urls[0])}"
 }

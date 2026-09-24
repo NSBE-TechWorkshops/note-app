@@ -39,3 +39,9 @@ resource "aws_ssm_parameter" "llm_model" {
   type  = "String"
   value = var.llm_model
 }
+
+resource "aws_ssm_parameter" "sqs_queue_url" {
+  name  = "/${local.name_prefix}/sqs-queue-url"
+  type  = "String"
+  value = aws_sqs_queue.document_processor.url
+}

@@ -55,6 +55,13 @@ data "aws_iam_policy_document" "ecs_task" {
   }
 
   statement {
+    sid       = "SQSSendMessages"
+    effect    = "Allow"
+    actions   = ["sqs:SendMessage"]
+    resources = [aws_sqs_queue.document_processor.arn]
+  }
+
+  statement {
     sid       = "ListUploads"
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
@@ -95,4 +102,89 @@ resource "aws_iam_role_policy" "ecs_task" {
   name   = "${local.name_prefix}-task-permissions"
   role   = aws_iam_role.ecs_task.id
   policy = data.aws_iam_policy_document.ecs_task.json
+}
+
+# Lambda execution role for document processor
+data "aws_iam_policy_document" "lambda_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "lambda_doc_processor" {
+  name               = "${local.name_prefix}-lambda-doc-processor"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "lambda_doc_processor" {
+  # SQS: receive/delete messages
+  statement {
+    sid    = "SQSAccess"
+    effect = "Allow"
+    actions = [
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+    ]
+    resources = [aws_sqs_queue.document_processor.arn]
+  }
+
+  # S3: read uploaded documents
+  statement {
+    sid       = "S3Read"
+    effect    = "Allow"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.uploads.arn}/uploads/*"]
+  }
+
+  # Secrets Manager: DB credentials + LLM API key
+  statement {
+    sid    = "SecretsAccess"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+    ]
+    resources = compact([
+      aws_secretsmanager_secret.database.arn,
+      try(aws_secretsmanager_secret.application[0].arn, null),
+    ])
+  }
+
+  # CloudWatch Logs
+  statement {
+    sid    = "Logs"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = ["arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"]
+  }
+
+  # VPC: ENI management for Lambda in VPC
+  statement {
+    sid    = "VPCAccess"
+    effect = "Allow"
+    actions = [
+      "ec2:CreateNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DeleteNetworkInterface",
+      "ec2:AssignPrivateIpAddresses",
+      "ec2:UnassignPrivateIpAddresses",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "lambda_doc_processor" {
+  name   = "${local.name_prefix}-lambda-doc-processor"
+  role   = aws_iam_role.lambda_doc_processor.id
+  policy = data.aws_iam_policy_document.lambda_doc_processor.json
 }

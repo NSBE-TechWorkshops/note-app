@@ -37,6 +37,7 @@ resource "aws_ecs_task_definition" "backend" {
         { name = "EMBEDDING_MODEL", value = var.embedding_model },
         { name = "LLM_MODEL", value = var.llm_model },
         { name = "CORS_ORIGINS", value = var.cors_origins },
+        { name = "SQS_QUEUE_URL", value = aws_sqs_queue.document_processor.url },
       ]
 
       secrets = concat(

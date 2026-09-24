@@ -28,6 +28,12 @@ variable "container_image_tag" {
   default     = "latest"
 }
 
+variable "lambda_image_tag" {
+  description = "ECR image tag for the document processor Lambda."
+  type        = string
+  default     = "latest"
+}
+
 variable "container_port" {
   description = "Port exposed by the FastAPI container."
   type        = number
