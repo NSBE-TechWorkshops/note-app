@@ -1,0 +1,7 @@
+sqlalchemy
+psycopg[binary]
+pgvector
+boto3
+langchain-openai
+langchain-text-splitters
+pypdf
