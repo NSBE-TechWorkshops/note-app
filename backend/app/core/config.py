@@ -1,3 +1,4 @@
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,7 +10,7 @@ class Settings(BaseSettings):
 
     # AWS
     aws_region: str = "us-east-1"
-    s3_bucket_name: str = ""
+    s3_bucket_name: str = Field(default="", validation_alias=AliasChoices("S3_BUCKET_NAME", "S3_UPLOAD_BUCKET"))
     sqs_queue_url: str = ""
 
     # Cognito
@@ -17,8 +18,8 @@ class Settings(BaseSettings):
     cognito_client_id: str = ""
     cognito_region: str = ""  # falls back to aws_region if empty
 
-    # OpenAI
-    openai_api_key: str = ""
+    # LLM
+    llm_api_key: str = Field(default="", validation_alias=AliasChoices("LLM_API_KEY", "OPENAI_API_KEY"))
 
     # CORS
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"

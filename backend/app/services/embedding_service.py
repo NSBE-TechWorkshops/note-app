@@ -2,7 +2,7 @@ from langchain_openai import OpenAIEmbeddings
 
 from app.core.config import settings
 
-_embeddings = OpenAIEmbeddings(openai_api_key=settings.openai_api_key, model="text-embedding-ada-002")
+_embeddings = OpenAIEmbeddings(openai_api_key=settings.llm_api_key, model="text-embedding-ada-002")
 
 
 def create_embedding(text: str) -> list[float]:

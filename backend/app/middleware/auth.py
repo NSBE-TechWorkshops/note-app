@@ -65,11 +65,10 @@ def get_current_user(
     payload = _decode_token(credentials.credentials)
     cognito_sub = payload["sub"]
     email = payload.get("email", "")
-    username = payload.get("username", "")
 
     user = db.query(User).filter(User.cognito_sub == cognito_sub).first()
     if user is None:
-        user = User(cognito_sub=cognito_sub, email=email, display_name=username)
+        user = User(cognito_sub=cognito_sub, email=email)
         db.add(user)
         db.commit()
         db.refresh(user)

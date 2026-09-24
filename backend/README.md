@@ -174,7 +174,7 @@ The middleware verifies the JWT signature against Cognito JWKS, validates the is
 | `COGNITO_USER_POOL_ID` | Yes | Cognito User Pool ID |
 | `COGNITO_CLIENT_ID` | Yes | Cognito App Client ID |
 | `COGNITO_REGION` | No | Cognito region (defaults to `AWS_REGION`) |
-| `OPENAI_API_KEY` | Yes | OpenAI API key for embeddings and chat |
+| `LLM_API_KEY` | Yes | API key for embeddings and chat (currently an OpenAI key) |
 | `CORS_ORIGINS` | No | Comma-separated allowed origins (default: `http://localhost:5173`) |
 
 ## Local Development

@@ -2,7 +2,10 @@ import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
+from app.core.database import Base, engine
+from app import models  # noqa: F401 - imports model metadata for create_all
 from app.routes import auth, documents, questions
 
 
@@ -13,6 +16,15 @@ def _cors_origins() -> list[str]:
 
 
 app = FastAPI(title="Note Buddy API")
+
+
+@app.on_event("startup")
+def init_db() -> None:
+    # ponytail: create tables on startup for dev; replace with Alembic before prod
+    with engine.begin() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+    Base.metadata.create_all(bind=engine)
+
 
 # security for server
 app.add_middleware(

@@ -5,7 +5,7 @@ from app.core.config import settings
 
 _MODEL = "gpt-4o-mini"
 
-_llm = ChatOpenAI(openai_api_key=settings.openai_api_key, model=_MODEL)
+_llm = ChatOpenAI(openai_api_key=settings.llm_api_key, model=_MODEL)
 
 _SYSTEM_PROMPT = (
     "You are a helpful study assistant. Answer the student's question using ONLY the "

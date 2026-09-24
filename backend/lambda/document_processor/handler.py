@@ -6,7 +6,7 @@ import uuid
 
 
 def _load_secrets():
-    """Load DATABASE_URL and OPENAI_API_KEY from Secrets Manager at cold start."""
+    """Load DATABASE_URL and LLM_API_KEY from Secrets Manager at cold start."""
     if os.environ.get("DATABASE_URL"):
         return  # Already loaded
 
@@ -26,7 +26,7 @@ def _load_secrets():
         resp = client.get_secret_value(SecretId=app_secret_arn)
         secret = json.loads(resp["SecretString"])
         if "llm_api_key" in secret:
-            os.environ["OPENAI_API_KEY"] = secret["llm_api_key"]
+            os.environ["LLM_API_KEY"] = secret["llm_api_key"]
 
 
 def lambda_doc_handler(event, context):
