@@ -42,6 +42,70 @@ export type AskResponse = {
   sources: { chunk_id: string; text_preview: string; document_id: string }[];
 };
 
+export type ChatSessionSummary = {
+  id: string;
+  title: string;
+  course_id?: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  model?: string | null;
+  created_at: string;
+};
+
+export type ChatSessionDetail = ChatSessionSummary & {
+  messages: ChatMessage[];
+};
+
+export type SendChatMessageResponse = {
+  session: ChatSessionSummary;
+  messages: ChatMessage[];
+  sources: { chunk_id: string; text_preview: string; document_id: string }[];
+};
+
+export async function listChatSessions(): Promise<ChatSessionSummary[]> {
+  const response = await fetch(`${apiBaseUrl}/chat/sessions`, { headers: await authHeaders() });
+  if (!response.ok) throw new Error("Failed to list chat sessions");
+  return response.json();
+}
+
+export async function createChatSession(title: string): Promise<ChatSessionSummary> {
+  const response = await fetch(`${apiBaseUrl}/chat/sessions`, {
+    method: "POST",
+    headers: {
+      ...(await authHeaders()),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title }),
+  });
+  if (!response.ok) throw new Error(await response.text());
+  return response.json();
+}
+
+export async function getChatSession(sessionId: string): Promise<ChatSessionDetail> {
+  const response = await fetch(`${apiBaseUrl}/chat/sessions/${sessionId}`, { headers: await authHeaders() });
+  if (!response.ok) throw new Error(await response.text());
+  return response.json();
+}
+
+export async function sendChatMessage(sessionId: string | null, content: string, documentIds: string[]): Promise<SendChatMessageResponse> {
+  const response = await fetch(sessionId ? `${apiBaseUrl}/chat/sessions/${sessionId}/messages` : `${apiBaseUrl}/chat/messages`, {
+    method: "POST",
+    headers: {
+      ...(await authHeaders()),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ content, session_id: sessionId, document_ids: documentIds }),
+  });
+  if (!response.ok) throw new Error(await response.text());
+  return response.json();
+}
+
 export async function askQuestion(question: string): Promise<AskResponse> {
   const response = await fetch(`${apiBaseUrl}/questions/ask`, {
     method: "POST",
