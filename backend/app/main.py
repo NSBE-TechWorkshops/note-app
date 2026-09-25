@@ -6,7 +6,7 @@ from sqlalchemy import text
 
 from app.core.database import Base, engine
 from app import models  # noqa: F401 - imports model metadata for create_all
-from app.routes import auth, documents, questions
+from app.routes import auth, chat, documents, questions
 
 
 # function for returning the correct origin
@@ -37,5 +37,6 @@ app.add_middleware(
 
 # routes
 app.include_router(auth.router)
+app.include_router(chat.router)
 app.include_router(documents.router)
 app.include_router(questions.router)
