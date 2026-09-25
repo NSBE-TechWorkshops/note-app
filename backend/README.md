@@ -192,6 +192,27 @@ API available at `http://localhost:8000`. Swagger docs at `http://localhost:8000
 - `application/pdf` — parsed via pypdf
 - `text/plain` — UTF-8 decoded
 
+## Testing
+
+```bash
+cd backend
+pip install -r requirements.txt
+pytest                # unit tests only if no database is reachable; integration tests are skipped
+```
+
+Integration tests (retrieval, ownership, the ingestion pipeline) need Postgres with pgvector. They only ever touch a
+database whose name ends in `_test` and roll back after each test:
+
+```bash
+docker run -d --name notebuddy-test-db -p 5433:5432 \
+  -e POSTGRES_USER=notebuddy -e POSTGRES_PASSWORD=notebuddy -e POSTGRES_DB=notebuddy_test \
+  pgvector/pgvector:pg16
+TEST_DATABASE_URL=postgresql://notebuddy:notebuddy@localhost:5433/notebuddy_test pytest
+```
+
+OpenAI, S3 and SQS are faked in tests, so no credentials are needed. CI (`.github/workflows/ci.yml`) runs lint, these
+tests, a frontend build, `terraform validate` and both Docker image builds on every push and pull request.
+
 ## Not Yet Implemented
 
 - Course CRUD routes (course_id FK exists on documents and questions)

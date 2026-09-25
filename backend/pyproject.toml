@@ -1,5 +1,19 @@
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# Correctness rules only for now (pycodestyle errors + pyflakes); widen later
+select = ["E4", "E7", "E9", "F"]
+
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = [
     "fastapi.Depends",
     "fastapi.Security",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "integration: needs a Postgres database with the pgvector extension (skipped when none is reachable)",
 ]
