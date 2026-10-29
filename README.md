@@ -16,7 +16,7 @@ Students upload notes or course materials, ask questions, and get LLM answers gr
 
 ### Stack
 
-- Frontend: React with TanStack tools
+- Frontend: React with TanStack 
 - Backend: Python with FastAPI on ECS/Fargate
 - Infrastructure: AWS, defined with Terraform
 - File storage: Amazon S3
