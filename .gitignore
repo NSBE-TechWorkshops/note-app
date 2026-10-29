@@ -17,6 +17,12 @@ dist/
 .env.*
 !.env.example
 
+# Pi agent and worktree tooling
+.pi/
+.workmux.yaml
+.workmux.yaml~*
+.worktrees/
+
 # OS/editor noise
 .DS_Store
 .idea/
